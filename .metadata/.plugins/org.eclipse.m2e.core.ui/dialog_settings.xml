@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="C:\Users\syeda\Documents\foodorbit\src\main\java\com\alpha\foodorbit"/>
 			<item value="C:\Users\nitee\Documents\foodorbit"/>
 		</list>
 		<list key="projectNameTemplate">

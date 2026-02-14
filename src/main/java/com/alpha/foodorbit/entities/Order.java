@@ -2,19 +2,21 @@ package com.alpha.foodorbit.entities;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+@Entity
 public class Order {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-    private Customer customer;
+    @ManyToMany
+    private List<Order> orders;
     private double cost;
     private List<Item> items;
     private String pickupAddress;
