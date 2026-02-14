@@ -19,6 +19,8 @@ public class Order {
     private List<Item> items;
     private String pickupAddress;
     private String deliveryAddress;
+	
+    @Column(unique = true)
     private String otp;
     private DeliveryPartner deliveryPartner;
     private Payment payment;
