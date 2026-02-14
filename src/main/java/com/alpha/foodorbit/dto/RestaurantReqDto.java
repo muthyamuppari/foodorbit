@@ -7,7 +7,7 @@ public class RestaurantReqDto {
     private String name;
     private long mobno;
     private String mailid;
-    private LocationCordinate locationCordinate;
+    private LocationCordinate locationCordinate=null;
     private String description;
     private double packagingFees;
     private String type;

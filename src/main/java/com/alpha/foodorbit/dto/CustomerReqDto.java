@@ -1,7 +1,5 @@
 package com.alpha.foodorbit.dto;
 
-import jakarta.persistence.Id;
-
 
 public class CustomerReqDto {
 

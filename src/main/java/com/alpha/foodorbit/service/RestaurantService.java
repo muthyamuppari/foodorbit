@@ -20,6 +20,8 @@ public class RestaurantService {
         restaurant.setMailid(restaurantReqDto.getMailid());
         //error line
 //        restaurant.setAddress(restaurantReqDto.getLocationCordinate());
+        restaurant.setAddress(null);
+
 
         restaurant.setDescription(restaurantReqDto.getDescription());
         restaurant.setPackagingFees(restaurantReqDto.getPackagingFees());

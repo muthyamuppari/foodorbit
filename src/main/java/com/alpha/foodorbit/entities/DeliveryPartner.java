@@ -3,12 +3,9 @@ package com.alpha.foodorbit.entities;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
-
+@Entity
 public class DeliveryPartner {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +17,7 @@ public class DeliveryPartner {
     private String email;
     private double rating;
     private String address;
+    @OneToOne
     private List<Order> orders;
     @Column(unique=true)
     private String vehicleNo;

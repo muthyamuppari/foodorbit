@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DeliveryPartnerController {
+public class DeliveryPartnerRegController {
 
     @Autowired
     private DeliveryPartnerService deliveryPartnerService;
