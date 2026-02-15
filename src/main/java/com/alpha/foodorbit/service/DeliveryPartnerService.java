@@ -7,6 +7,8 @@ import com.alpha.foodorbit.repository.DeliveryPartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.DocFlavor;
+
 @Service
 public class DeliveryPartnerService {
 
@@ -22,4 +24,16 @@ public class DeliveryPartnerService {
         deliveryPartner.setVehicleNo(deliveryPartnerDto.getVehicleNo());
         deliveryPartnerRepository.save(deliveryPartner);
     }
+
+    public void deletePartner(long mobno){
+        DeliveryPartner d= deliveryPartnerRepository.findByMobno(mobno);
+        deliveryPartnerRepository.delete(d);
+
+    }
+
+    public DeliveryPartner findDeliveryPartner(long mobno) {
+
+        return deliveryPartnerRepository.findByMobno(mobno);
+    }
+
 }

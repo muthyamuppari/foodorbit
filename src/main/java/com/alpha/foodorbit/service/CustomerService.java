@@ -21,4 +21,17 @@ public class CustomerService {
          customer.setGender(customerReqDto.getGender());
          customerRepository.save(customer);
     }
+
+    public void deleteCustomer(long mobno) {
+       Customer c= customerRepository.findByMobno(mobno);
+       customerRepository.delete(c);
+
+    }
+
+    public Customer findCustomer(long mobno) {
+        return  customerRepository.findByMobno(mobno);
+
+
+
+    }
 }

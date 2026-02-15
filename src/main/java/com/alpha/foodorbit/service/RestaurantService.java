@@ -30,4 +30,13 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
 
     }
+
+    public void deleteRestaurant(long mobno) {
+          Restaurant r=  restaurantRepository.findByMobno(mobno);
+          restaurantRepository.delete(r);
+    }
+
+    public Restaurant findRestaurant(long mobno) {
+        return restaurantRepository.findByMobno(mobno);
+    }
 }

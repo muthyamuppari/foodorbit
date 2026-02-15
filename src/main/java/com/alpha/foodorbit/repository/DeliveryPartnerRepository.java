@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeliveryPartnerRepository extends JpaRepository<DeliveryPartner,Integer> {
+
+    DeliveryPartner findByMobno(long mobno);
 }
