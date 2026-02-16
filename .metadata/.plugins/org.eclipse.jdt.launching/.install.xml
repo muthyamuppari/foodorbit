@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <dirs>
+    <entry loc="C:\Users\syeda\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.9.v20251105-0741" stamp="1763400167396"/>
     <entry loc="C:\Users\nitee\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.9.v20251105-0741\jre" stamp="1763373240185"/>
+    <entry loc="C:\Program Files\Java\jdk-20" stamp="1679978928644"/>
     <entry loc="C:\Program Files\Java\jdk-21" stamp="1741069038269"/>
+    <entry loc="C:\Users\syeda\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.9.v20251105-0741\jre" stamp="1763400167396"/>
     <entry loc="C:\Users\nitee\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.9.v20251105-0741" stamp="1763373240193"/>
 </dirs>
