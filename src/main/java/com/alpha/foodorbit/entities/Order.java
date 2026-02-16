@@ -25,6 +25,7 @@ public class Order {
     private List<Item> items;
     private String pickupAddress;
     private String deliveryAddress;
+	@@Column(unique = true)
     private String otp;
     @OneToOne
     private DeliveryPartner deliveryPartner;
