@@ -10,7 +10,7 @@ import com.alpha.foodorbit.entities.Restaurant;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
 
-    Optional<Restaurant> findByMailid(String mailid);
+    Optional<Restaurant> findByMobno(long mobno);
 
 }
 
