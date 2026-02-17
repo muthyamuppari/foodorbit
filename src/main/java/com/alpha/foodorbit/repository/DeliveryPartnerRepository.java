@@ -10,6 +10,6 @@ import com.alpha.foodorbit.entities.DeliveryPartner;
 @Repository
 public interface DeliveryPartnerRepository extends JpaRepository<DeliveryPartner, Integer> {
 
-    Optional<DeliveryPartner> findByVehicleNo(String vehicleNo);
+    Optional<DeliveryPartner> findByMobno(long mobno);
 
 }
