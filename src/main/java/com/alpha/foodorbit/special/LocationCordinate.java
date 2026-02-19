@@ -2,30 +2,30 @@ package com.alpha.foodorbit.special;
 
 public class LocationCordinate {
 
-    private double latitude;
-    private double longitute;
+    private Double latitude;
+    private Double longitute;
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitute() {
-        return longitute;
-    }
-
-    public void setLongitute(double longitute) {
-        this.longitute = longitute;
-    }
-
-    public LocationCordinate(double latitude, double longitute) {
+    public LocationCordinate(Double latitude, Double longitute) {
         this.latitude = latitude;
         this.longitute = longitute;
     }
 
     public LocationCordinate() {
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitute() {
+        return longitute;
+    }
+
+    public void setLongitute(Double longitute) {
+        this.longitute = longitute;
     }
 }

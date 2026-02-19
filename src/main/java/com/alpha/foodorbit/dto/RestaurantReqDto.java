@@ -7,9 +7,9 @@ public class RestaurantReqDto {
     private String name;
     private long mobno;
     private String mailid;
-    private LocationCordinate locationCordinate=null;
+    private LocationCordinate locationCordinate;
     private String description;
-    private double packagingFees;
+    private Double packagingFees;
     private String type;
 
     public String getDescription() {
@@ -52,11 +52,11 @@ public class RestaurantReqDto {
         this.name = name;
     }
 
-    public double getPackagingFees() {
+    public Double getPackagingFees() {
         return packagingFees;
     }
 
-    public void setPackagingFees(double packagingFees) {
+    public void setPackagingFees(Double packagingFees) {
         this.packagingFees = packagingFees;
     }
 
