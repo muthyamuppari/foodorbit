@@ -1,13 +1,18 @@
 package com.alpha.foodorbit.repository;
 
-import com.alpha.foodorbit.entities.Restaurant;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import com.alpha.foodorbit.entities.Restaurant;
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<Restaurant,Integer> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Integer> {
+
+    Optional<Restaurant> findByMobno(long mobno);
 
     Optional<Restaurant> findByMobno(long mobno);
 }
+

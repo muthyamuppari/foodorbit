@@ -1,7 +1,15 @@
 package com.alpha.foodorbit.repository;
 
-import com.alpha.foodorbit.entities.Order;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-public interface OrderRepository extends JpaRepository<Order,Integer> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.alpha.foodorbit.entities.Order;
+
+@Repository
+public interface OrderRepository extends JpaRepository<Order, Integer> {
+
+    Optional<Order> findByOtp(String otp);
+
 }
