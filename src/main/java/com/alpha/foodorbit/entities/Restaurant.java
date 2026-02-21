@@ -1,4 +1,5 @@
 package com.alpha.foodorbit.entities;
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 
@@ -21,9 +22,8 @@ public class Restaurant {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "restaurant_id")
-    private List<Item> menu;
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    private List<Item> menu=new ArrayList<>();
 
  
     private String status;
@@ -36,7 +36,7 @@ public class Restaurant {
     private List<Order> orders;
 
    
-    private double packagingFees;
+    private Double packagingFees;
 
   
     private String type;
@@ -95,8 +95,8 @@ public class Restaurant {
     public List<Order> getOrders() { return orders; }
     public void setOrders(List<Order> orders) { this.orders = orders; }
 
-    public double getPackagingFees() { return packagingFees; }
-    public void setPackagingFees(double packagingFees) { this.packagingFees = packagingFees; }
+    public Double getPackagingFees() { return packagingFees; }
+    public void setPackagingFees(Double packagingFees) { this.packagingFees = packagingFees; }
 
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
@@ -117,4 +117,5 @@ public class Restaurant {
                 ", type=" + type +
                 '}';
     }
+
 }

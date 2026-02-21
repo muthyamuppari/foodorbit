@@ -16,6 +16,7 @@ public class DeliveryPartner {
     @Column(unique=true)
     private String email;
     private double rating;
+    //prob
     private String address;
     @OneToOne
     private List<Order> orders;

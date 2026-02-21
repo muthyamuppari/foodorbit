@@ -29,6 +29,21 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Item> cart;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<CartItem> cartItems;
+
+    public Customer(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
+
     public Customer(){
     	
     }
