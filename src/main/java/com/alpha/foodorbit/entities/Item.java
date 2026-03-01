@@ -1,5 +1,6 @@
 package com.alpha.foodorbit.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -35,6 +36,7 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
+    @JsonIgnore
     private Restaurant restaurant;
 
     public Item(Restaurant restaurant) {

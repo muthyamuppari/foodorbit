@@ -1,5 +1,7 @@
 package com.alpha.foodorbit.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -8,8 +10,8 @@ import jakarta.persistence.*;
 @Table(name = "orders")
 public class Order {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String status;
 
@@ -18,90 +20,55 @@ public class Order {
     private Restaurant restaurant;
     @OneToOne
     private Customer customer;
-    @ManyToMany
-    private List<Order> orders;
+    //    @ManyToMany
+//    private List<Order> orders;
     private double cost;
     @OneToMany
     private List<Item> items;
-    private String pickupAddress;
-    private String deliveryAddress;
-    private String otp;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pickup_address_id")
+    private Address pickupAddress;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "delivery_address_id")
+    private Address deliveryAddress;
+    private int otp;
     @OneToOne
     private DeliveryPartner deliveryPartner;
-    @OneToOne
+    @OneToOne(mappedBy = "order" ,cascade = CascadeType.ALL)
     private Payment payment;
     private String estimatedTime;
-    private double distance;
+
+    private Double distance;
     private double discount;
     private String coupon;
     private String specialRequest;
     private String deliveryInstructions;
-    private String date; // String type as requested
+    private LocalDateTime date;
 
-    // 🔹 Default Constructor
     public Order() {
     }
 
-    // 🔹 Full Constructor (ALL fields)
-    public Order(String status, Restaurant restaurant,
-                 Customer customer, double cost, List<Item> items,
-                 String pickupAddress, String deliveryAddress,
-                 String otp, DeliveryPartner deliveryPartner,
-                 Payment payment, String estimatedTime,
-                 double distance, double discount, String coupon,
-                 String specialRequest, String deliveryInstructions,
-                 String date) {
-
-        this.status = status;
-        this.restaurant = restaurant;
-        this.customer = customer;
+    public Order(double cost, String coupon, Customer customer, LocalDateTime date, Address deliveryAddress, String deliveryInstructions,
+                 DeliveryPartner deliveryPartner, double discount, Double distance, String estimatedTime, int id, List<Item> items,
+                 int otp, Payment payment, Address pickupAddress, Restaurant restaurant, String specialRequest, String status) {
         this.cost = cost;
-        this.items = items;
-        this.pickupAddress = pickupAddress;
-        this.deliveryAddress = deliveryAddress;
-        this.otp = otp;
-        this.deliveryPartner = deliveryPartner;
-        this.payment = payment;
-        this.estimatedTime = estimatedTime;
-        this.distance = distance;
-        this.discount = discount;
         this.coupon = coupon;
-        this.specialRequest = specialRequest;
-        this.deliveryInstructions = deliveryInstructions;
-        this.date = date;
-    }
-
-    // 🔹 Getters and Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
         this.customer = customer;
+        this.date = date;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryInstructions = deliveryInstructions;
+        this.deliveryPartner = deliveryPartner;
+        this.discount = discount;
+        this.distance = distance;
+        this.estimatedTime = estimatedTime;
+        this.id = id;
+        this.items = items;
+        this.otp = otp;
+        this.payment = payment;
+        this.pickupAddress = pickupAddress;
+        this.restaurant = restaurant;
+        this.specialRequest = specialRequest;
+        this.status = status;
     }
 
     public double getCost() {
@@ -112,78 +79,6 @@ public class Order {
         this.cost = cost;
     }
 
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public String getPickupAddress() {
-        return pickupAddress;
-    }
-
-    public void setPickupAddress(String pickupAddress) {
-        this.pickupAddress = pickupAddress;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getOtp() {
-        return otp;
-    }
-
-    public void setOtp(String otp) {
-        this.otp = otp;
-    }
-
-    public DeliveryPartner getDeliveryPartner() {
-        return deliveryPartner;
-    }
-
-    public void setDeliveryPartner(DeliveryPartner deliveryPartner) {
-        this.deliveryPartner = deliveryPartner;
-    }
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-    }
-
-    public String getEstimatedTime() {
-        return estimatedTime;
-    }
-
-    public void setEstimatedTime(String estimatedTime) {
-        this.estimatedTime = estimatedTime;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
     public String getCoupon() {
         return coupon;
     }
@@ -192,12 +87,28 @@ public class Order {
         this.coupon = coupon;
     }
 
-    public String getSpecialRequest() {
-        return specialRequest;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setSpecialRequest(String specialRequest) {
-        this.specialRequest = specialRequest;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public Address getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(Address deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
     public String getDeliveryInstructions() {
@@ -208,34 +119,101 @@ public class Order {
         this.deliveryInstructions = deliveryInstructions;
     }
 
-    public String getDate() {
-        return date;
+    public DeliveryPartner getDeliveryPartner() {
+        return deliveryPartner;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDeliveryPartner(DeliveryPartner deliveryPartner) {
+        this.deliveryPartner = deliveryPartner;
     }
 
-    // 🔹 toString Override
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", status=" + status +
-                ", restaurant=" + restaurant +
-                ", customer=" + customer +
-                ", cost=" + cost +
-                ", pickupAddress='" + pickupAddress + '\'' +
-                ", deliveryAddress='" + deliveryAddress + '\'' +
-                ", deliveryPartner=" + deliveryPartner +
-                ", payment=" + payment +
-                ", estimatedTime='" + estimatedTime + '\'' +
-                ", distance=" + distance +
-                ", discount=" + discount +
-                ", coupon=" + coupon +
-                ", specialRequest='" + specialRequest + '\'' +
-                ", deliveryInstructions='" + deliveryInstructions + '\'' +
-                ", date='" + date + '\'' +
-                '}';
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public String getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(String estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public int getOtp() {
+        return otp;
+    }
+
+    public void setOtp(int otp) {
+        this.otp = otp;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public Address getPickupAddress() {
+        return pickupAddress;
+    }
+
+    public void setPickupAddress(Address pickupAddress) {
+        this.pickupAddress = pickupAddress;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public String getSpecialRequest() {
+        return specialRequest;
+    }
+
+    public void setSpecialRequest(String specialRequest) {
+        this.specialRequest = specialRequest;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
+
+

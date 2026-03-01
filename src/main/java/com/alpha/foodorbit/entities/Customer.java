@@ -20,8 +20,9 @@ public class Customer {
 
     private String gender;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Address address;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private List<Address> address;
 
     @OneToMany( cascade = CascadeType.ALL)
     private List<Order> orders;
@@ -29,8 +30,10 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Item> cart;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",cascade=CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems;
+
+
 
     public Customer(List<CartItem> cartItems) {
         this.cartItems = cartItems;
@@ -48,15 +51,23 @@ public class Customer {
     	
     }
 
+    public List<Address> getAddress() {
+        return address;
+    }
+
+    public void setAddress(List<Address> address) {
+        this.address = address;
+    }
+
     // All-fields constructor
     public Customer( String name, long mobno, String mailid, String gender,
-                    Address address, List<Order> orders, List<Item> cart) {
+                    List<Order> orders, List<Item> cart) {
     
         this.name = name;
         this.mobno = mobno;
         this.mailid = mailid;
         this.gender = gender;
-        this.address = address;
+
         this.orders = orders;
         this.cart = cart;
     }
@@ -102,13 +113,7 @@ public class Customer {
         this.gender = gender;
     }
 
-    public Address getAddress() {
-        return address;
-    }
 
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
     public List<Order> getOrders() {
         return orders;

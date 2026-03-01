@@ -1,6 +1,8 @@
 package com.alpha.foodorbit.entities;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +24,7 @@ public class Restaurant {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Item> menu=new ArrayList<>();
 

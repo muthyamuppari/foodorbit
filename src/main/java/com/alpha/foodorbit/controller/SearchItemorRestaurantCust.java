@@ -2,27 +2,25 @@ package com.alpha.foodorbit.controller;
 
 import com.alpha.foodorbit.entities.Restaurant;
 import com.alpha.foodorbit.service.RestaurantService;
-import com.alpha.foodorbit.special.ResponseStructure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class FindRestaurant {
+public class SearchItemorRestaurantCust {
 
     @Autowired
     private RestaurantService restaurantService;
 
-    @GetMapping("/find/restaurant")
-    public ResponseEntity<ResponseStructure<Restaurant>> findRestaurant(@RequestParam long mobno){
-//        Restaurant r=restaurantService.findRestaurant(mobno);
-        return restaurantService.findRestaurant(mobno);
-
-
+        @PostMapping("/customer/SearchItemOrRestaurant")
+    public ResponseEntity<List<Restaurant>> SearchItemOrRestaurant(@RequestParam long mobno, @RequestParam String SearchKey){
+        List<Restaurant> result = restaurantService.searchItemorRestaurant(mobno, SearchKey);
+        return  new ResponseEntity<>(result, HttpStatus.OK);
     }
-
 
 }

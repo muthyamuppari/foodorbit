@@ -1,5 +1,6 @@
 package com.alpha.foodorbit.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +12,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     private Customer customer;
 
     @ManyToOne
@@ -32,6 +34,13 @@ public class CartItem {
 
     public CartItem() {
     }
+
+    public CartItem(Item item, int quantity) {
+        this.item=item;
+        this.quantity=quantity;
+    }
+
+
 
     public Customer getCustomer() {
         return customer;

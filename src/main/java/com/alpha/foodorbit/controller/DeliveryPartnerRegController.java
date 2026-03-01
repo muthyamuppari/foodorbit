@@ -19,4 +19,6 @@ public class DeliveryPartnerRegController {
     public void adding(@RequestBody DeliveryPartnerDto deliveryPartnerDto){
         deliveryPartnerService.adding(deliveryPartnerDto);
     }
+
+
 }
