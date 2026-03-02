@@ -2,15 +2,21 @@ package com.alpha.foodorbit.service;
 
 import com.alpha.foodorbit.dto.RestaurantReqDto;
 import com.alpha.foodorbit.entities.Address;
+import com.alpha.foodorbit.entities.Customer;
 import com.alpha.foodorbit.entities.Item;
 import com.alpha.foodorbit.entities.Restaurant;
 import com.alpha.foodorbit.repository.AddressRepository;
+import com.alpha.foodorbit.repository.CustomerRepository;
 import com.alpha.foodorbit.repository.ItemRepository;
 import com.alpha.foodorbit.repository.RestaurantRepository;
+import com.alpha.foodorbit.special.ResponseStructure;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,6 +29,8 @@ public class RestaurantService {
 
     @Autowired
     private ItemRepository itemRepository;
+    @Autowired
+    private CustomerRepository customerRepository;
 
      @Autowired
      private RestTemplate restTemplate;
@@ -67,8 +75,14 @@ public class RestaurantService {
           restaurantRepository.delete(r);
     }
 
-    public Restaurant findRestaurant(long mobno) {
-        return restaurantRepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Restaurant Not Found"));
+    public ResponseEntity<ResponseStructure<Restaurant>> findRestaurant(long mobno) {
+
+        Restaurant restaurant = restaurantRepository.findByMobno(mobno).orElseThrow(() -> new RuntimeException("Restaurant Not Found"));
+        ResponseStructure<Restaurant> rs=new ResponseStructure<>();
+        rs.setStatuscode(HttpStatus.FOUND.value());
+        rs.setMessage("Restaurant Fetched Successfully");
+        rs.setData(restaurant);
+        return new ResponseEntity<ResponseStructure<Restaurant>>(rs,HttpStatus.FOUND);
     }
 
     public Restaurant addtomenu(Item item, long mobno) {
@@ -95,5 +109,18 @@ public class RestaurantService {
          else if(item.getAvailability().equals("Not Available")) item.setAvailability("Available");
 
          itemRepository.save(item);
+    }
+
+
+
+    public List<Restaurant> searchItemorRestaurant(long mobno, String searchKey) {
+        Customer cust=customerRepository.findByMobno(mobno).orElseThrow(()->new RuntimeException("Customer not found"));
+         String city=cust.getAddress().get(0).getCity();
+         List<Restaurant> restaurants=restaurantRepository.findByAddress_City(city);
+         return restaurants.stream().filter(r->r.getMenu().stream()
+                 .anyMatch(menu->menu.getName().toLowerCase().contains(searchKey.toLowerCase())) ||
+                 r.getName().toLowerCase().contains(searchKey.toLowerCase())).toList();
+
+
     }
 }

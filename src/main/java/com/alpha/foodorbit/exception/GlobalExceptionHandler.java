@@ -1,0 +1,28 @@
+package com.alpha.foodorbit.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<String> handleSqlIntegrity(SQLIntegrityConstraintViolationException ex){
+
+        return new ResponseEntity<>("Duplicate entry or Constraint Voilation.Please Check your Input Bro", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DifferentRestaurantItem.class)
+    public ResponseEntity<String> handleDifferentRest(DifferentRestaurantItem ex){
+        return new ResponseEntity<>("Cannot Add Item from Different Restaurant Brother",HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(CustomerNotFound.class)
+    public ResponseEntity<String> handleCustomer(CustomerNotFound ex){
+        return new ResponseEntity<>("Customer Not Found with given ID Brother",HttpStatus.BAD_REQUEST);
+    }
+
+}

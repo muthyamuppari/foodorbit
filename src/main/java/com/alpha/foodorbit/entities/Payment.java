@@ -1,10 +1,9 @@
 package com.alpha.foodorbit.entities;
-
 import jakarta.persistence.*;
+
 
 @Entity
 public class Payment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -18,6 +17,7 @@ public class Payment {
     private String status;
 
     @OneToOne
+    @JoinColumn(name = "order_id")
     private Order order;
 
    

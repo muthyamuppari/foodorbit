@@ -1,12 +1,38 @@
 package com.alpha.foodorbit.dto;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CustomerReqDto {
 
     private String name;
     private long mobno;
     private String mailid;
     private  String gender;
+
+    private List<CustAddressReqDto> addresses;
+
+//    public CustomerReqDto(List<CustAddressReqDto> addresses) {
+//        this.addresses = addresses;
+//    }
+//
+//    public List<CustAddressReqDto> getAddresses() {
+//        return addresses;
+//    }
+//
+//    public void setAddresses(List<CustAddressReqDto> addresses) {
+//        this.addresses = addresses;
+//    }
+
+
+    public List<CustAddressReqDto> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<CustAddressReqDto> addresses) {
+        this.addresses = addresses;
+    }
 
     public String getGender() {
         return gender;

@@ -1,5 +1,6 @@
 package com.alpha.foodorbit.controller;
 
+import com.alpha.foodorbit.entities.CartItem;
 import com.alpha.foodorbit.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,5 +18,11 @@ public class AddToCartCust{
     public ResponseEntity<String> addtocart(@RequestParam long mobno,@RequestParam int Itemid,@RequestParam int quantity){
         customerService.addtocart(mobno,Itemid,quantity);
         return new ResponseEntity<>("Added To Cart", HttpStatus.OK);
+
+    }
+    @PostMapping("/customer/addtocartt")
+    public ResponseEntity<CartItem> addtocartt(@RequestParam long mobno, @RequestParam int Itemid, @RequestParam int quantity){
+        CartItem addtocartt = customerService.addtocartt(mobno, Itemid, quantity);
+        return new ResponseEntity<>(addtocartt,HttpStatus.OK);
     }
 }
