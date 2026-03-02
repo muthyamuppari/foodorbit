@@ -1,7 +1,16 @@
 package com.alpha.foodorbit.repository;
 
-import com.alpha.foodorbit.entities.Item;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
-public interface ItemRepository extends JpaRepository<Item,Integer> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.alpha.foodorbit.entities.Item;
+
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Integer> {
+
+    Optional<Item> findByName(String name);
+
 }
+
