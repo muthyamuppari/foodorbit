@@ -8,7 +8,9 @@ import com.alpha.foodorbit.exception.CustomerNotFound;
 import com.alpha.foodorbit.exception.DifferentRestaurantItem;
 import com.alpha.foodorbit.repository.*;
 import com.alpha.foodorbit.special.DistanceUtil;
+import com.alpha.foodorbit.special.ResponseStructure;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -175,7 +177,7 @@ public class CustomerService {
 
     }
 
-    public void placingOrder(long mobno, String paymentType, String addressType, String specialRequest) {
+    public ResponseEntity<ResponseStructure<Order>> placingOrder(long mobno, String paymentType, String addressType, String specialRequest) {
         Customer customer = customerRepository.findByMobno(mobno).orElseThrow(() -> new CustomerNotFound("Cust not found"));
 
         if(customer.getCartItems().isEmpty()){
@@ -203,9 +205,6 @@ public class CustomerService {
          order.setCoupon(null);
          order.setDeliveryPartner(null);
          order.setDate(LocalDateTime.now());
-
-
-
 
          //Distance
         double distance= DistanceUtil.calculateDistance(pickupAddress.getLatitude(),pickupAddress.getLongitude()
@@ -244,10 +243,25 @@ public class CustomerService {
         order.setOtp(otp);
 
 
-         orderRepository.save(order);
-
+        Order orderinitiated=  orderRepository.save(order);
+        ResponseStructure<Order> rs = new ResponseStructure<>();
+        rs.setData(orderinitiated);
+        rs.setMessage("Order Initiated,Do you wish to Confirm Order");
+        rs.setStatuscode(200);
+        return new ResponseEntity<ResponseStructure<Order>>(rs, HttpStatus.OK);
     }
 
 
+    public void denyPlacingOrder(int orderid) {
+        Order order = orderRepository.findById(orderid).orElseThrow(() -> new RuntimeException("Order not found with this id"));
+        order.setStatus("Cancelled");
+        orderRepository.save(order);
+    }
+
+    public void confirmPlacingOrder(int orderid) {
+        Order order = orderRepository.findById(orderid).orElseThrow(() -> new RuntimeException("Order not found with this id"));
+        order.setStatus("Placed");
+        orderRepository.save(order);
+    }
 }
 
