@@ -15,7 +15,10 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>("Duplicate entry or Constraint Voilation.Please Check your Input Bro", HttpStatus.BAD_REQUEST);
     }
-
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<String> handleItemNotFound(ItemNotFoundException ex){
+        return new ResponseEntity<>("Item Not Found with this ID",HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(DifferentRestaurantItem.class)
     public ResponseEntity<String> handleDifferentRest(DifferentRestaurantItem ex){
         return new ResponseEntity<>("Cannot Add Item from Different Restaurant Brother",HttpStatus.BAD_REQUEST);

@@ -1,16 +1,11 @@
 package com.alpha.foodorbit.service;
 
 import com.alpha.foodorbit.dto.RestaurantReqDto;
-import com.alpha.foodorbit.entities.Address;
-import com.alpha.foodorbit.entities.Customer;
-import com.alpha.foodorbit.entities.Item;
-import com.alpha.foodorbit.entities.Restaurant;
-import com.alpha.foodorbit.repository.AddressRepository;
-import com.alpha.foodorbit.repository.CustomerRepository;
-import com.alpha.foodorbit.repository.ItemRepository;
-import com.alpha.foodorbit.repository.RestaurantRepository;
+import com.alpha.foodorbit.entities.*;
+import com.alpha.foodorbit.repository.*;
 import com.alpha.foodorbit.special.ResponseStructure;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,6 +29,9 @@ public class RestaurantService {
 
      @Autowired
      private RestTemplate restTemplate;
+
+     @Autowired
+     private OrderRepository orderRepository;
     public void adding(RestaurantReqDto restaurantReqDto) {
 
         Restaurant restaurant=new Restaurant();
@@ -123,4 +121,21 @@ public class RestaurantService {
 
 
     }
+    @Autowired
+    private RedisService redisService;
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
+    public List<String> acceptorder(double latitude, double longitude, Integer orderid) {
+           Order order= orderRepository.findById(orderid).orElseThrow(()->new RuntimeException("Order does not exist"));
+         List<String> nearbyPartners= redisService.findNearbyPartners(latitude,longitude,5.0);
+         String orderKey= "order:"+orderid;
+         for(String partnerid:nearbyPartners){
+             Long size = redisTemplate.opsForSet().add(orderKey, partnerid);
+//             redisTemplate.opsForHash().put(orderKey,partnerid,String.valueOf(order.getCost()));
+         }
+          return nearbyPartners;
+    }
+
+
 }

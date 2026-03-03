@@ -20,11 +20,12 @@ public class Order {
     private Restaurant restaurant;
     @OneToOne
     private Customer customer;
-    //    @ManyToMany
+//        @ManyToMany
 //    private List<Order> orders;
     private double cost;
     @OneToMany
     private List<Item> items;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pickup_address_id")
     private Address pickupAddress;
@@ -32,8 +33,10 @@ public class Order {
     @JoinColumn(name = "delivery_address_id")
     private Address deliveryAddress;
     private int otp;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "delivery_partner_id")
     private DeliveryPartner deliveryPartner;
+
     @OneToOne(mappedBy = "order" ,cascade = CascadeType.ALL)
     private Payment payment;
     private String estimatedTime;

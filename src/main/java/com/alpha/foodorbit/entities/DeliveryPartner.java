@@ -16,56 +16,39 @@ public class DeliveryPartner {
     @Column(unique=true)
     private String email;
     private double rating;
-    //prob
-    private String address;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @OneToMany(mappedBy = "deliveryPartner")
     private List<Order> orders;
     @Column(unique=true)
     private String vehicleNo;
     private String status;
 
-    // Default Constructor
+    public DeliveryPartner(Address address, String email, int id, String mobno, String name,
+                           List<Order> orders, double rating, String status, String vehicleNo) {
+        this.address = address;
+        this.email = email;
+        this.id = id;
+        this.mobno = mobno;
+        this.name = name;
+        this.orders = orders;
+        this.rating = rating;
+        this.status = status;
+        this.vehicleNo = vehicleNo;
+    }
+
     public DeliveryPartner() {
     }
 
-    // Parameterized Constructor
-    public DeliveryPartner( String name, String mobno, String email,
-                           double rating, String address, List<Order> orders,
-                           String vehicleNo, String status) {
-       
-        this.name = name;
-        this.mobno = mobno;
-        this.email = email;
-        this.rating = rating;
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
         this.address = address;
-        this.orders = orders;
-        this.vehicleNo = vehicleNo;
-        this.status = status;
-    }
-
-    // Getters and Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMobno() {
-        return mobno;
-    }
-
-    public void setMobno(String mobno) {
-        this.mobno = mobno;
     }
 
     public String getEmail() {
@@ -76,20 +59,28 @@ public class DeliveryPartner {
         this.email = email;
     }
 
-    public double getRating() {
-        return rating;
+    public int getId() {
+        return id;
     }
 
-    public void setRating(double rating) {
-        this.rating = rating;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getAddress() {
-        return address;
+    public String getMobno() {
+        return mobno;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setMobno(String mobno) {
+        this.mobno = mobno;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Order> getOrders() {
@@ -100,12 +91,12 @@ public class DeliveryPartner {
         this.orders = orders;
     }
 
-    public String getVehicleNo() {
-        return vehicleNo;
+    public double getRating() {
+        return rating;
     }
 
-    public void setVehicleNo(String vehicleNo) {
-        this.vehicleNo = vehicleNo;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
     public String getStatus() {
@@ -116,20 +107,11 @@ public class DeliveryPartner {
         this.status = status;
     }
 
-   
-    @Override
-    public String toString() {
-        return "DeliveryPartner{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", mobno='" + mobno + '\'' +
-                ", email='" + email + '\'' +
-                ", rating=" + rating +
-                ", address='" + address + '\'' +
-                ", vehicle=" + vehicleNo +
-                ", status=" + status +
-            
-                '}';
+    public String getVehicleNo() {
+        return vehicleNo;
     }
-    
+
+    public void setVehicleNo(String vehicleNo) {
+        this.vehicleNo = vehicleNo;
+    }
 }
