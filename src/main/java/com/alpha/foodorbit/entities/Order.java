@@ -22,7 +22,7 @@ public class Order {
     private Customer customer;
 //        @ManyToMany
 //    private List<Order> orders;
-    private double cost;
+
     @OneToMany
     private List<Item> items;
 
@@ -37,7 +37,7 @@ public class Order {
     @JoinColumn(name = "delivery_partner_id")
     private DeliveryPartner deliveryPartner;
 
-    @OneToOne(mappedBy = "order" ,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
     private String estimatedTime;
 
@@ -48,16 +48,21 @@ public class Order {
     private String deliveryInstructions;
     private LocalDateTime date;
 
+    private double orderCost;
+    private double delivery_charges;
+    private double packagingFees;
+    private double tax;
+    private double platformFees;
+    private double totalCost;
+
     public Order() {
     }
 
-    public Order(double cost, String coupon, Customer customer, LocalDateTime date, Address deliveryAddress, String deliveryInstructions,
-                 DeliveryPartner deliveryPartner, double discount, Double distance, String estimatedTime, int id, List<Item> items,
-                 int otp, Payment payment, Address pickupAddress, Restaurant restaurant, String specialRequest, String status) {
-        this.cost = cost;
+    public Order(String coupon, Customer customer, LocalDateTime date, double delivery_charges, Address deliveryAddress, String deliveryInstructions, DeliveryPartner deliveryPartner, double discount, Double distance, String estimatedTime, int id, List<Item> items, double orderCost, int otp, double packagingFees, Payment payment, Address pickupAddress, double platformFees, Restaurant restaurant, String specialRequest, String status, double tax, double totalCost) {
         this.coupon = coupon;
         this.customer = customer;
         this.date = date;
+        this.delivery_charges = delivery_charges;
         this.deliveryAddress = deliveryAddress;
         this.deliveryInstructions = deliveryInstructions;
         this.deliveryPartner = deliveryPartner;
@@ -66,20 +71,17 @@ public class Order {
         this.estimatedTime = estimatedTime;
         this.id = id;
         this.items = items;
+        this.orderCost = orderCost;
         this.otp = otp;
+        this.packagingFees = packagingFees;
         this.payment = payment;
         this.pickupAddress = pickupAddress;
+        this.platformFees = platformFees;
         this.restaurant = restaurant;
         this.specialRequest = specialRequest;
         this.status = status;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
+        this.tax = tax;
+        this.totalCost = totalCost;
     }
 
     public String getCoupon() {
@@ -104,6 +106,14 @@ public class Order {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public double getDelivery_charges() {
+        return delivery_charges;
+    }
+
+    public void setDelivery_charges(double delivery_charges) {
+        this.delivery_charges = delivery_charges;
     }
 
     public Address getDeliveryAddress() {
@@ -170,12 +180,28 @@ public class Order {
         this.items = items;
     }
 
+    public double getOrderCost() {
+        return orderCost;
+    }
+
+    public void setOrderCost(double orderCost) {
+        this.orderCost = orderCost;
+    }
+
     public int getOtp() {
         return otp;
     }
 
     public void setOtp(int otp) {
         this.otp = otp;
+    }
+
+    public double getPackagingFees() {
+        return packagingFees;
+    }
+
+    public void setPackagingFees(double packagingFees) {
+        this.packagingFees = packagingFees;
     }
 
     public Payment getPayment() {
@@ -192,6 +218,14 @@ public class Order {
 
     public void setPickupAddress(Address pickupAddress) {
         this.pickupAddress = pickupAddress;
+    }
+
+    public double getPlatformFees() {
+        return platformFees;
+    }
+
+    public void setPlatformFees(double platformFees) {
+        this.platformFees = platformFees;
     }
 
     public Restaurant getRestaurant() {
@@ -217,6 +251,21 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
-}
 
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+}
 

@@ -27,5 +27,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCustomer(CustomerNotFound ex){
         return new ResponseEntity<>("Customer Not Found with given ID Brother",HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<String> handeOrder(OrderNotFoundException ex){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
 
 }
