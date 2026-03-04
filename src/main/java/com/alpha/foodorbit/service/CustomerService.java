@@ -3,9 +3,11 @@ package com.alpha.foodorbit.service;
 
 import com.alpha.foodorbit.dto.CustAddressReqDto;
 import com.alpha.foodorbit.dto.CustomerReqDto;
+import com.alpha.foodorbit.dto.OrderNeedConsentDto;
 import com.alpha.foodorbit.entities.*;
 import com.alpha.foodorbit.exception.CustomerNotFound;
 import com.alpha.foodorbit.exception.DifferentRestaurantItem;
+import com.alpha.foodorbit.exception.OrderNotFoundException;
 import com.alpha.foodorbit.repository.*;
 import com.alpha.foodorbit.special.DistanceUtil;
 import com.alpha.foodorbit.special.ResponseStructure;
@@ -177,7 +179,7 @@ public class CustomerService {
 
     }
 
-    public ResponseEntity<ResponseStructure<Order>> placingOrder(long mobno, String paymentType, String addressType, String specialRequest) {
+    public ResponseEntity<ResponseStructure<OrderNeedConsentDto>> placingOrder(long mobno, String paymentType, String addressType, String specialRequest) {
         Customer customer = customerRepository.findByMobno(mobno).orElseThrow(() -> new CustomerNotFound("Cust not found"));
 
         if(customer.getCartItems().isEmpty()){
@@ -185,10 +187,11 @@ public class CustomerService {
         }
         Order order=new Order();
         order.setCustomer(customer);
-        order.setStatus("Placed");
+        order.setStatus("Waiting_For_Consent");
 
         Restaurant restaurant = customer.getCartItems().get(0).getItem().getRestaurant();
-         order.setRestaurant(restaurant);
+        //after accepting
+//         order.setRestaurant(restaurant);
            Address pickupAddress=restaurant.getAddress();
          order.setPickupAddress(pickupAddress);
          Address delivAddress=null;
@@ -216,18 +219,32 @@ public class CustomerService {
              delivery_charge= (distance-2)*10;
          }
          delivery_charge=Math.round(delivery_charge);
+         order.setDelivery_charges(delivery_charge);
          double cost=0;
 
          for( CartItem c:customer.getCartItems()){
 
              cost=cost+(c.getItem().getPrice()*c.getQuantity());
                      }
-        double FinalCost= cost + delivery_charge + restaurant.getPackagingFees();
 
-         order.setCost(FinalCost);
+        order.setTax(10);
+         order.setPlatformFees(5.0);
+//        double orderCost= cost + delivery_charge + restaurant.getPackagingFees();
+
+        order.setOrderCost(cost);
+
+        order.setPackagingFees(restaurant.getPackagingFees());
+        double packagingFees= order.getPackagingFees();
+        double tax = order.getTax();
+        double platformFees= order.getPlatformFees();;
+        double TotalCost= order.getTotalCost();
+
+        double finalCost= (cost + delivery_charge +  packagingFees + tax + platformFees + TotalCost);
+
+        order.setTotalCost(finalCost);
 
           Payment payment=new Payment();
-          payment.setAmount(FinalCost);
+
           payment.setType(paymentType);
           if(paymentType.equalsIgnoreCase("COD")){
               payment.setStatus("Pending");
@@ -242,26 +259,50 @@ public class CustomerService {
         int otp= 1000 + random.nextInt(9000);
         order.setOtp(otp);
 
-
         Order orderinitiated=  orderRepository.save(order);
-        ResponseStructure<Order> rs = new ResponseStructure<>();
-        rs.setData(orderinitiated);
+        OrderNeedConsentDto dto = new OrderNeedConsentDto();
+
+        dto.setOrderId(orderinitiated.getId());
+        dto.setRestaurantName(restaurant.getName());
+        dto.setItemCost(cost);
+        dto.setDeliveryCharges(delivery_charge);
+        dto.setPackagingFees(packagingFees);
+        dto.setTax(tax);
+        dto.setPlatformFees(platformFees);
+        dto.setTotalCost(finalCost);
+        dto.setDistance(distance);
+
+        ResponseStructure<OrderNeedConsentDto> rs = new ResponseStructure<>();
+        rs.setData(dto);
         rs.setMessage("Order Initiated,Do you wish to Confirm Order");
         rs.setStatuscode(200);
-        return new ResponseEntity<ResponseStructure<Order>>(rs, HttpStatus.OK);
+        return new ResponseEntity<ResponseStructure<OrderNeedConsentDto>>(rs, HttpStatus.OK);
     }
 
 
-    public void denyPlacingOrder(int orderid) {
-        Order order = orderRepository.findById(orderid).orElseThrow(() -> new RuntimeException("Order not found with this id"));
+    public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(int orderid) {
+        Order order = orderRepository.findById(orderid).orElseThrow(() -> new OrderNotFoundException("Order not found with this id"));
         order.setStatus("Cancelled");
         orderRepository.save(order);
+        ResponseStructure<String> rs=new ResponseStructure<>();
+        rs.setData("Denied");
+        rs.setMessage("Order Cancelled Successfully");
+        rs.setStatuscode(200);
+        return  new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
     }
 
-    public void confirmPlacingOrder(int orderid) {
-        Order order = orderRepository.findById(orderid).orElseThrow(() -> new RuntimeException("Order not found with this id"));
+    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(int orderid) {
+        Order order = orderRepository.findById(orderid).orElseThrow(() -> new OrderNotFoundException("Order not found with this id"));
+        Customer customer = order.getCustomer();
+        Restaurant restaurant = customer.getCartItems().get(0).getItem().getRestaurant();
+        order.setRestaurant(restaurant);
         order.setStatus("Placed");
-        orderRepository.save(order);
+       orderRepository.save(order);
+       ResponseStructure<String> rs=new ResponseStructure<>();
+       rs.setData("Success");
+       rs.setMessage("Order Placed Successfully");
+       rs.setStatuscode(200);
+       return  new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
     }
 }
 

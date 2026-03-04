@@ -1,6 +1,7 @@
 package com.alpha.foodorbit.controller;
 
 import com.alpha.foodorbit.dto.CustomerReqDto;
+import com.alpha.foodorbit.dto.OrderNeedConsentDto;
 import com.alpha.foodorbit.entities.CartItem;
 import com.alpha.foodorbit.entities.Customer;
 import com.alpha.foodorbit.entities.Order;
@@ -74,21 +75,22 @@ public class CustomerRegController {
     }
 
     @PostMapping("/customer/placeOrder")
-    public ResponseEntity<ResponseStructure<Order>> placeOrder(@RequestParam long mobno, @RequestParam String PaymentType, @RequestParam String AddressType
+    public ResponseEntity<ResponseStructure<OrderNeedConsentDto>> placeOrder(@RequestParam long mobno, @RequestParam String PaymentType,
+                                                                             @RequestParam String AddressType
             , @RequestParam String SpecialRequest) {
         return customerService.placingOrder(mobno, PaymentType, AddressType, SpecialRequest);
     }
 
     @PostMapping("/customer/ConfirmPlacingOrder")
-    public ResponseEntity<String> confirmPlacingOrder(@RequestParam int orderid) {
-        customerService.confirmPlacingOrder(orderid);
-        return new ResponseEntity<>("Order Placed Successfully", HttpStatus.OK);
+    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(@RequestParam int orderid) {
+       return  customerService.confirmPlacingOrder(orderid);
+//        return new ResponseEntity<>("Order Placed Successfully", HttpStatus.OK);
     }
 
     @PostMapping("/customer/denyPlacingOrder")
-    public ResponseEntity<String> denyPlacingOrder(@RequestParam int orderid) {
-        customerService.denyPlacingOrder(orderid);
-        return new ResponseEntity<>("Order Cancelled Successfully", HttpStatus.OK);
+    public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(@RequestParam int orderid) {
+        return customerService.denyPlacingOrder(orderid);
+//        return new ResponseEntity<>("Order Cancelled Successfully", HttpStatus.OK);
     }
 
 }
