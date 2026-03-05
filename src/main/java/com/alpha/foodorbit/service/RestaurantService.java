@@ -132,7 +132,7 @@ public class RestaurantService {
          String orderKey= "order:"+orderid;
          for(String partnerid:nearbyPartners){
              Long size = redisTemplate.opsForSet().add(orderKey, partnerid);
-//             redisTemplate.opsForHash().put(orderKey,partnerid,String.valueOf(order.getCost()));
+
          }
           return nearbyPartners;
     }
