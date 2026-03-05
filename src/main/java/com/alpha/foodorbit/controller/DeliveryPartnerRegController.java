@@ -5,11 +5,15 @@ import com.alpha.foodorbit.dto.RestaurantReqDto;
 import com.alpha.foodorbit.entities.DeliveryPartner;
 import com.alpha.foodorbit.service.DeliveryPartnerService;
 import com.alpha.foodorbit.service.RedisService;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class DeliveryPartnerRegController {
@@ -53,5 +57,19 @@ public class DeliveryPartnerRegController {
 
         return accepted ? "Order Assigned Successfully" : "Order Already Taken";
     }
+
+    @GetMapping("/deliveryPartner/getDirectionToRest")
+    public void getDirectionToRest(@RequestParam Integer partnerId,
+                                   @RequestParam double restlat, @RequestParam double restlong,
+                                   HttpServletResponse resp) throws IOException {
+         deliveryPartnerService.getDirectionToRest(partnerId,restlat,restlong,resp);
+    }
+
+    @GetMapping("/deliveryPartner/getDirectionToCust")
+    public void getDirectionToCust(@RequestParam double restlat,@RequestParam double restlon,@RequestParam double custlat
+                                   ,@RequestParam double custlong,HttpServletResponse rest) throws IOException {
+         deliveryPartnerService.getDirectionToCust(restlat,restlon,custlat,custlong,rest);
+    }
+
 
 }

@@ -8,12 +8,16 @@ import com.alpha.foodorbit.entities.Order;
 import com.alpha.foodorbit.repository.AddressRepository;
 import com.alpha.foodorbit.repository.DeliveryPartnerRepository;
 import com.alpha.foodorbit.repository.OrderRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.print.DocFlavor;
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -86,5 +90,33 @@ public class DeliveryPartnerService {
             return true;
         }
         return false;
+    }
+
+    public void getDirectionToRest(Integer partnerId, double restlat,
+                                   double restlong, HttpServletResponse resp) throws IOException {
+
+        String key="deliverypartner:location";
+        List<Point> points = redisTemplate.opsForGeo().position(key, partnerId.toString());
+
+        if(points== null || points.isEmpty()){
+            throw new RuntimeException("Delivery Partner Location not found");
+        }
+              Point p =points.get(0);
+        double  dplon= p.getX();
+       double dplat= p.getY();
+
+
+        String getdir="https://www.google.com/maps/dir/?api=1&origin="+dplat+","+dplon+"&destination="+restlat+
+                ","+restlong+"&travelmode=driving";
+        resp.sendRedirect(getdir);
+
+    }
+
+
+    public void getDirectionToCust(double restlat, double restlon, double custlat, double custlong, HttpServletResponse rest) throws IOException {
+
+        String getdir="https://www.google.com/maps/dir/?api=1&origin="+restlat+","+restlon+"&destination="+custlat+
+                ","+custlong+"&travelmode=driving";
+        rest.sendRedirect(getdir);
     }
 }
