@@ -1,13 +1,17 @@
 package com.alpha.foodorbit.repository;
 
-import com.alpha.foodorbit.entities.DeliveryPartner;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import com.alpha.foodorbit.entities.DeliveryPartner;
 
 @Repository
-public interface DeliveryPartnerRepository extends JpaRepository<DeliveryPartner,Integer> {
+public interface DeliveryPartnerRepository extends JpaRepository<DeliveryPartner, Integer> {
 
     Optional<DeliveryPartner> findByMobno(long mobno);
+
+    //Optional<DeliveryPartner> findByMobno(long mobno);
 }
