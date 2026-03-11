@@ -70,6 +70,10 @@ public class DeliveryPartnerRegController {
                                    ,@RequestParam double custlong,HttpServletResponse rest) throws IOException {
          deliveryPartnerService.getDirectionToCust(restlat,restlon,custlat,custlong,rest);
     }
+    @GetMapping("/deliveryPartner/markOrderAsDelivered")
+    public void markOrderAsDelivered(@RequestParam long dpmobno,@RequestParam Integer orderId,@RequestParam int otp){
+        deliveryPartnerService.markOrderAsDelivered(dpmobno,orderId,otp);
+    }
 
 
 }

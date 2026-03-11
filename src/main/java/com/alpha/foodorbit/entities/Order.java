@@ -43,7 +43,7 @@ public class Order {
 
     private Double distance;
     private double discount;
-    private String coupon;
+//    private String coupon;
     private String specialRequest;
     private String deliveryInstructions;
     private LocalDateTime date;
@@ -54,12 +54,19 @@ public class Order {
     private double tax;
     private double platformFees;
     private double totalCost;
+    @ManyToOne
+    private Coupon coupon;
 
-    public Order() {
-    }
+    @OneToOne(mappedBy = "order")
+    private CouponRedemption couponRedemption;
 
-    public Order(String coupon, Customer customer, LocalDateTime date, double delivery_charges, Address deliveryAddress, String deliveryInstructions, DeliveryPartner deliveryPartner, double discount, Double distance, String estimatedTime, int id, List<Item> items, double orderCost, int otp, double packagingFees, Payment payment, Address pickupAddress, double platformFees, Restaurant restaurant, String specialRequest, String status, double tax, double totalCost) {
+    public Order(Coupon coupon, CouponRedemption couponRedemption, Customer customer, LocalDateTime date, double delivery_charges,
+                 Address deliveryAddress, String deliveryInstructions, DeliveryPartner deliveryPartner, double discount, Double distance,
+                 String estimatedTime, int id, List<Item> items, double orderCost, int otp, double packagingFees, Payment payment,
+                 Address pickupAddress, double platformFees, Restaurant restaurant, String specialRequest, String status, double tax,
+                 double totalCost) {
         this.coupon = coupon;
+        this.couponRedemption = couponRedemption;
         this.customer = customer;
         this.date = date;
         this.delivery_charges = delivery_charges;
@@ -84,12 +91,23 @@ public class Order {
         this.totalCost = totalCost;
     }
 
-    public String getCoupon() {
+    public Order() {
+    }
+
+    public Coupon getCoupon() {
         return coupon;
     }
 
-    public void setCoupon(String coupon) {
+    public void setCoupon(Coupon coupon) {
         this.coupon = coupon;
+    }
+
+    public CouponRedemption getCouponRedemption() {
+        return couponRedemption;
+    }
+
+    public void setCouponRedemption(CouponRedemption couponRedemption) {
+        this.couponRedemption = couponRedemption;
     }
 
     public Customer getCustomer() {

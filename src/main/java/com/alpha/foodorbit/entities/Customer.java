@@ -1,10 +1,10 @@
 package com.alpha.foodorbit.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-
 public class Customer {
 
     @Id
@@ -27,28 +27,37 @@ public class Customer {
     @OneToMany( cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Item> cart;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<Item> cart;
 
     @OneToMany(mappedBy = "customer",cascade=CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItems;
 
 
+    @OneToMany(mappedBy = "customer")
+    private List<CouponRedemption> couponRedemptions=new ArrayList<>();
 
-    public Customer(List<CartItem> cartItems) {
+    private double penalty;
+    private double wallet;
+
+
+    public Customer(List<Address> address, List<CartItem> cartItems, List<CouponRedemption> couponRedemptions,
+                    String gender, int id, String mailid, long mobno, String name,
+                    List<Order> orders, double penalty, double wallet) {
+        this.address = address;
         this.cartItems = cartItems;
+        this.couponRedemptions = couponRedemptions;
+        this.gender = gender;
+        this.id = id;
+        this.mailid = mailid;
+        this.mobno = mobno;
+        this.name = name;
+        this.orders = orders;
+        this.penalty = penalty;
+        this.wallet = wallet;
     }
 
-    public List<CartItem> getCartItems() {
-        return cartItems;
-    }
-
-    public void setCartItems(List<CartItem> cartItems) {
-        this.cartItems = cartItems;
-    }
-
-    public Customer(){
-    	
+    public Customer() {
     }
 
     public List<Address> getAddress() {
@@ -59,50 +68,20 @@ public class Customer {
         this.address = address;
     }
 
-    // All-fields constructor
-    public Customer( String name, long mobno, String mailid, String gender,
-                    List<Order> orders, List<Item> cart) {
-    
-        this.name = name;
-        this.mobno = mobno;
-        this.mailid = mailid;
-        this.gender = gender;
-
-        this.orders = orders;
-        this.cart = cart;
+    public List<CartItem> getCartItems() {
+        return cartItems;
     }
 
-    // Getters and Setters
-    public int getId() {
-        return id;
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public List<CouponRedemption> getCouponRedemptions() {
+        return couponRedemptions;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getMobno() {
-        return mobno;
-    }
-
-    public void setMobno( long mobno) {
-        this.mobno = mobno;
-    }
-
-    public String getMailid() {
-        return mailid;
-    }
-
-    public void setMailid(String mailid) {
-        this.mailid = mailid;
+    public void setCouponRedemptions(List<CouponRedemption> couponRedemptions) {
+        this.couponRedemptions = couponRedemptions;
     }
 
     public String getGender() {
@@ -113,7 +92,37 @@ public class Customer {
         this.gender = gender;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getMailid() {
+        return mailid;
+    }
+
+    public void setMailid(String mailid) {
+        this.mailid = mailid;
+    }
+
+    public long getMobno() {
+        return mobno;
+    }
+
+    public void setMobno(long mobno) {
+        this.mobno = mobno;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public List<Order> getOrders() {
         return orders;
@@ -123,26 +132,19 @@ public class Customer {
         this.orders = orders;
     }
 
-    public List<Item> getCart() {
-        return cart;
+    public double getPenalty() {
+        return penalty;
     }
 
-    public void setCart(List<Item> cart) {
-        this.cart = cart;
+    public void setPenalty(double penalty) {
+        this.penalty = penalty;
     }
 
-    // toString override
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", mobno='" + mobno + '\'' +
-                ", mailid='" + mailid + '\'' +
-                ", gender='" + gender + '\'' +
-                ", address=" + address +
-                ", orders=" + orders +
-                ", cart=" + cart +
-                '}';
+    public double getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
     }
 }

@@ -1,5 +1,6 @@
 package com.alpha.foodorbit.controller;
 
+import com.alpha.foodorbit.dto.CartResponseDto;
 import com.alpha.foodorbit.dto.CustomerReqDto;
 import com.alpha.foodorbit.dto.OrderNeedConsentDto;
 import com.alpha.foodorbit.entities.CartItem;
@@ -54,12 +55,12 @@ public class CustomerRegController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/customer/addtocart")
-    public ResponseEntity<String> addtocart(@RequestParam long mobno, @RequestParam int Itemid, @RequestParam int quantity) {
-        customerService.addtocart(mobno, Itemid, quantity);
-        return new ResponseEntity<>("Added To Cart", HttpStatus.OK);
-
-    }
+//    @PostMapping("/customer/addtocart")
+//    public ResponseEntity<String> addtocart(@RequestParam long mobno, @RequestParam int Itemid, @RequestParam int quantity) {
+//        customerService.addtocart(mobno, Itemid, quantity);
+//        return new ResponseEntity<>("Added To Cart", HttpStatus.OK);
+//
+//    }
 
     @PostMapping("/customer/addtocartt")
     public ResponseEntity<CartItem> addtocartt(@RequestParam long mobno, @RequestParam int Itemid, @RequestParam int quantity) {
@@ -67,19 +68,19 @@ public class CustomerRegController {
         return new ResponseEntity<>(addtocartt, HttpStatus.OK);
     }
 
-    @GetMapping("/customer/getCart")
-    public ResponseEntity<List<CartItem>> getAllCart(@RequestParam long mobno) {
-        List<CartItem> allCart = customerService.getAllCart(mobno);
-        return new ResponseEntity<>(allCart, HttpStatus.OK);
+//    @GetMapping("/customer/getCart")
+//    public ResponseEntity<List<CartItem>> getAllCart(@RequestParam long mobno) {
+//        List<CartItem> allCart = customerService.getAllCart(mobno);
+//        return new ResponseEntity<>(allCart, HttpStatus.OK);
+//
+//    }
 
-    }
-
-    @PostMapping("/customer/placeOrder")
-    public ResponseEntity<ResponseStructure<OrderNeedConsentDto>> placeOrder(@RequestParam long mobno, @RequestParam String PaymentType,
-                                                                             @RequestParam String AddressType
-            , @RequestParam String SpecialRequest) {
-        return customerService.placingOrder(mobno, PaymentType, AddressType, SpecialRequest);
-    }
+//    @PostMapping("/customer/placeOrder")
+//    public ResponseEntity<ResponseStructure<OrderNeedConsentDto>> placeOrder(@RequestParam long mobno, @RequestParam String PaymentType,
+//                                                                             @RequestParam String AddressType
+//            , @RequestParam String SpecialRequest) {
+//        return customerService.placingOrder(mobno, PaymentType, AddressType, SpecialRequest);
+//    }
 
     @PostMapping("/customer/ConfirmPlacingOrder")
     public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(@RequestParam int orderid) {
@@ -91,6 +92,27 @@ public class CustomerRegController {
     public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(@RequestParam int orderid) {
         return customerService.denyPlacingOrder(orderid);
 //        return new ResponseEntity<>("Order Cancelled Successfully", HttpStatus.OK);
+    }
+    @DeleteMapping("/customer/removeItemFromCart")
+    public ResponseEntity<ResponseStructure<String>> removeItemFromCart(@RequestParam long mobno,@RequestParam int itemid){
+        return customerService.removeItemFromCart(mobno,itemid);
+    }
+
+    @GetMapping("/customer/getcart")
+    public CartResponseDto getCart(@RequestParam long custmobno){
+        return customerService.getCart(custmobno);
+    }
+    @PostMapping("/customer/placeOrder")
+    public ResponseEntity<ResponseStructure<OrderNeedConsentDto>> placeOrder(@RequestParam long mobno, @RequestParam String PaymentType,
+                                                                             @RequestParam String AddressType
+            , @RequestParam String SpecialRequest,@RequestParam Integer couponId) {
+        return customerService.placingOrder(mobno, PaymentType, AddressType, SpecialRequest,couponId);
+    }
+
+
+    @PostMapping("/customer/cancelOrder")
+    public ResponseEntity<ResponseStructure<String>> cancleOrder(@RequestParam long mobno,@RequestParam int orderId){
+        return customerService.cancelOrder(mobno,orderId);
     }
 
 }

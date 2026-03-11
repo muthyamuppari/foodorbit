@@ -5,6 +5,9 @@ import com.alpha.foodorbit.dto.RestaurantReqDto;
 import com.alpha.foodorbit.entities.Address;
 import com.alpha.foodorbit.entities.DeliveryPartner;
 import com.alpha.foodorbit.entities.Order;
+import com.alpha.foodorbit.exception.DeliveryPartnerNotFound;
+import com.alpha.foodorbit.exception.InvalidOtpException;
+import com.alpha.foodorbit.exception.OrderNotFoundException;
 import com.alpha.foodorbit.repository.AddressRepository;
 import com.alpha.foodorbit.repository.DeliveryPartnerRepository;
 import com.alpha.foodorbit.repository.OrderRepository;
@@ -19,6 +22,7 @@ import javax.print.DocFlavor;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class DeliveryPartnerService {
@@ -59,14 +63,14 @@ public class DeliveryPartnerService {
     }
 
     public void deletePartner(long mobno) {
-        DeliveryPartner d = deliveryPartnerRepository.findByMobno(mobno);
+        DeliveryPartner d = deliveryPartnerRepository.findByMobno(mobno).orElseThrow(()->new DeliveryPartnerNotFound("Delivery Partner Not Found"));
         deliveryPartnerRepository.delete(d);
 
     }
 
     public DeliveryPartner findDeliveryPartner(long mobno) {
 
-        return deliveryPartnerRepository.findByMobno(mobno);
+        return deliveryPartnerRepository.findByMobno(mobno).orElseThrow(()->new DeliveryPartnerNotFound("Delivery Partner Not Found"));
     }
 
     @Autowired
@@ -86,7 +90,8 @@ public class DeliveryPartnerService {
             order.setDeliveryPartner(deliveryPartner);
             orderRepository.save(order);
             redisTemplate.delete("order:" + orderid);
-
+           order.setStatus("DeliveryPartnerAssigned-OrderPreparing");
+           orderRepository.save(order);
             return true;
         }
         return false;
@@ -118,5 +123,18 @@ public class DeliveryPartnerService {
         String getdir="https://www.google.com/maps/dir/?api=1&origin="+restlat+","+restlon+"&destination="+custlat+
                 ","+custlong+"&travelmode=driving";
         rest.sendRedirect(getdir);
+    }
+
+    public void markOrderAsDelivered(long dpmobno, Integer orderId, int otp) {
+        DeliveryPartner deliveryPartner = deliveryPartnerRepository.findByMobno(dpmobno).orElseThrow(() -> new DeliveryPartnerNotFound("Delivery Partner Not Found"));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with thid id"));
+        if(order.getOtp()==otp){
+            order.setStatus("Order_Delivered");
+        }else{
+            throw new InvalidOtpException("Invalid OTP");
+        }
+
+     orderRepository.save(order);
+
     }
 }
