@@ -11,20 +11,43 @@ public class OrderNeedConsentDto {
     private double platformFees;
     private double totalCost;
     private double distance;
+    private double discount;
+    private double penalty;
 
-    public OrderNeedConsentDto(double deliveryCharges, double distance,
-                            double itemCost, Integer orderId, double packagingFees, double platformFees, String restaurantName,
-                            double tax, double totalCost) {
+
+    public OrderNeedConsentDto(double deliveryCharges, double discount, double distance, double itemCost,
+                               Integer orderId, double packagingFees, double penalty, double platformFees,
+                               String restaurantName, double tax, double totalCost) {
         this.deliveryCharges = deliveryCharges;
+        this.discount = discount;
         this.distance = distance;
         this.itemCost = itemCost;
         this.orderId = orderId;
         this.packagingFees = packagingFees;
+        this.penalty = penalty;
         this.platformFees = platformFees;
         this.restaurantName = restaurantName;
         this.tax = tax;
         this.totalCost = totalCost;
     }
+
+    public double getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(double penalty) {
+        this.penalty = penalty;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+
 
     public OrderNeedConsentDto() {
     }

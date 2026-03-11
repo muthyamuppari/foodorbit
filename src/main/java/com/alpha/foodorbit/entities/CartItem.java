@@ -15,6 +15,9 @@ public class CartItem {
     @JsonIgnore
     private Customer customer;
 
+
+
+
     @ManyToOne
     @JoinColumn(name = "Item_id")
     private Item item;

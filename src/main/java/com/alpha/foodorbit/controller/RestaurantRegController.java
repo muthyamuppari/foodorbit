@@ -2,6 +2,7 @@ package com.alpha.foodorbit.controller;
 
 import com.alpha.foodorbit.dto.RestaurantReqDto;
 import com.alpha.foodorbit.entities.Item;
+import com.alpha.foodorbit.entities.Order;
 import com.alpha.foodorbit.entities.Restaurant;
 import com.alpha.foodorbit.service.RedisService;
 import com.alpha.foodorbit.service.RestaurantService;
@@ -69,6 +70,28 @@ public class RestaurantRegController {
         return  restaurantService.acceptorder(latitude,longitude,orderid);
 
     }
+    @DeleteMapping("/restaurant/removeItemFromMenu")
+    public ResponseEntity<ResponseStructure<String>> removeItemFromMenu(@RequestParam long mobno,@RequestParam Integer itemid){
+        return restaurantService.removeItemFromMenu(mobno,itemid);
+    }
+
+    @GetMapping("/restaurant/getMenu")
+    public List<Item> getMenu(@RequestParam long mobno){
+        return restaurantService.getMenu(mobno);
+    }
+    @PutMapping("/restaurant/updateItemDetails")
+    public String updateItemDetails(@RequestParam long mobno,@RequestParam Integer itemid,Item updateItem){
+        return restaurantService.updateItemDetails(mobno,itemid,updateItem);
+    }
+
+    @PostMapping("/restaurant/cancelOrder")
+    public ResponseEntity<ResponseStructure<String>> orderCancelled(@RequestParam long mobno, @RequestParam Integer orderid){
+         return  restaurantService.orderCancelled(mobno,orderid);
+    }
+
+
+
+
 
 
 }
