@@ -3,6 +3,7 @@ package com.alpha.foodorbit.service;
 import com.alpha.foodorbit.dto.RestaurantReqDto;
 import com.alpha.foodorbit.entities.*;
 import com.alpha.foodorbit.exception.ItemNotFoundException;
+import com.alpha.foodorbit.exception.RestaurantBlockedException;
 import com.alpha.foodorbit.exception.RestaurantNotFound;
 import com.alpha.foodorbit.repository.*;
 import com.alpha.foodorbit.special.ResponseStructure;
@@ -174,6 +175,9 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findByMobno(mobno).orElseThrow(() -> new RestaurantNotFound("Restaurant not found"));
         Order order = orderRepository.findById(orderid).orElseThrow(() -> new RuntimeException("Order does not exist"));
 
+        if("Blocked".equalsIgnoreCase(restaurant.getStatus())){
+            throw new RestaurantBlockedException("Restaurant is Blocked,Pay Penalty to accept Order.");
+        }
         order.setStatus("CancelledByRestaurant");
         order.setRestaurant(restaurant);
         double penalty=0;
@@ -194,4 +198,4 @@ public class RestaurantService {
        return new ResponseEntity<>(rs,HttpStatus.OK);
 
     }
-}
+    }

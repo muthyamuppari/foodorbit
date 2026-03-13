@@ -27,20 +27,26 @@ public class DeliveryPartner {
     private String vehicleNo;
     private String status;
 
-    public DeliveryPartner(Address address, String email, int id, String mobno, String name,
-                           List<Order> orders, double rating, String status, String vehicleNo) {
+    private double penalty;
+    private double wallet;
+
+    public DeliveryPartner() {
+    }
+
+    public DeliveryPartner(Address address, String email,
+                           int id, String mobno, String name, List<Order> orders, double penalty,
+                           double rating, String status, String vehicleNo, double wallet) {
         this.address = address;
         this.email = email;
         this.id = id;
         this.mobno = mobno;
         this.name = name;
         this.orders = orders;
+        this.penalty = penalty;
         this.rating = rating;
         this.status = status;
         this.vehicleNo = vehicleNo;
-    }
-
-    public DeliveryPartner() {
+        this.wallet = wallet;
     }
 
     public Address getAddress() {
@@ -91,6 +97,14 @@ public class DeliveryPartner {
         this.orders = orders;
     }
 
+    public double getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(double penalty) {
+        this.penalty = penalty;
+    }
+
     public double getRating() {
         return rating;
     }
@@ -113,5 +127,13 @@ public class DeliveryPartner {
 
     public void setVehicleNo(String vehicleNo) {
         this.vehicleNo = vehicleNo;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
     }
 }

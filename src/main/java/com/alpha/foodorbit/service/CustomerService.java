@@ -194,17 +194,22 @@ public class CustomerService {
     }
 
     public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(int orderid) {
+
         Order order = orderRepository.findById(orderid).orElseThrow(() -> new OrderNotFoundException("Order not found with this id"));
-        Customer customer = order.getCustomer();
-        Restaurant restaurant = customer.getCartItems().get(0).getItem().getRestaurant();
-        order.setRestaurant(restaurant);
-        order.setStatus("Order_Confirmed_By_Customer");
-       orderRepository.save(order);
-       ResponseStructure<String> rs=new ResponseStructure<>();
-       rs.setData("Success");
-       rs.setMessage("Order Placed Successfully");
-       rs.setStatuscode(200);
-       return  new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
+        if(order.getCustomer().getPenalty()==0.0){
+            Customer customer = order.getCustomer();
+            Restaurant restaurant = customer.getCartItems().get(0).getItem().getRestaurant();
+            order.setRestaurant(restaurant);
+            order.setStatus("Order_Confirmed_By_Customer");
+            orderRepository.save(order);
+            ResponseStructure<String> rs=new ResponseStructure<>();
+            rs.setData("Success");
+            rs.setMessage("Order Placed Successfully");
+            rs.setStatuscode(200);
+            return  new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.OK);
+        }else{
+            throw new PayPenaltyException("Penalty Not Paid,Go For Online Payment");
+        }
     }
 
     public ResponseEntity<ResponseStructure<String>> removeItemFromCart(long mobno, int itemid) {
@@ -412,6 +417,7 @@ public class CustomerService {
                     order.setStatus("Cancelled");
                 }else{
                     customer.setPenalty(order.getTotalCost());
+                    order.setStatus("Cancelled");
                 }
             }
         }
@@ -427,6 +433,45 @@ public class CustomerService {
         structure.setData("Order ID " + orderId + " cancelled");
 
         return new ResponseEntity<>(structure, HttpStatus.OK);
+    }
+
+
+//    public ResponseEntity<ResponseStructure<String>> confirmByOnlinePayment(long mobno, int orderid) {
+//        Customer customer = customerRepository.findByMobno(mobno).orElseThrow(() -> new CustomerNotFound("customer not found"));
+//        Order order = orderRepository.findById(orderid).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+//        double amount = order.getTotalCost();
+//
+//        if(amount<=0){
+//            throw new RuntimeException("Invalid Order amount");
+//        }
+//
+//
+//    }
+
+    public ResponseEntity<ResponseStructure<String>> OnlinepaymentSuccess(int orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        order.setStatus("CONFIRMED");
+        orderRepository.save(order);
+        ResponseStructure<String> structure = new ResponseStructure<>();
+        structure.setStatuscode(HttpStatus.OK.value());
+        structure.setMessage("Payment successful, order confirmed");
+        structure.setData("Order placed successfully");
+
+        return new ResponseEntity<>(structure, HttpStatus.OK);
+
+    }
+
+    public ResponseEntity<ResponseStructure<String>> OnlinePaymentFailed(int orderId) {
+
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        order.setStatus("CANCELLED");
+        orderRepository.save(order);
+        ResponseStructure<String> structure = new ResponseStructure<>();
+        structure.setStatuscode(HttpStatus.BAD_REQUEST.value());
+        structure.setMessage("Payment failed, order cancelled");
+        structure.setData("Retry payment");
+
+        return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
     }
 }
 

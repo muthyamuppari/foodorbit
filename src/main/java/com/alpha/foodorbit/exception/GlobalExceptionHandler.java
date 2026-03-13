@@ -62,6 +62,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(PayPenaltyException.class)
+    public ResponseEntity<String> handlePayPenalty(PayPenaltyException ex){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(RestaurantBlockedException.class)
+    public ResponseEntity<String> handlePayPenalty(RestaurantBlockedException ex){
+        return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+
 
 
 
