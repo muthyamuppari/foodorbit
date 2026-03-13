@@ -11,10 +11,13 @@ import com.alpha.foodorbit.exception.OrderNotFoundException;
 import com.alpha.foodorbit.repository.AddressRepository;
 import com.alpha.foodorbit.repository.DeliveryPartnerRepository;
 import com.alpha.foodorbit.repository.OrderRepository;
+import com.alpha.foodorbit.special.ResponseStructure;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -125,16 +128,27 @@ public class DeliveryPartnerService {
         rest.sendRedirect(getdir);
     }
 
-    public void markOrderAsDelivered(long dpmobno, Integer orderId, int otp) {
+    public ResponseEntity<ResponseStructure<String>> markOrderAsDelivered(long dpmobno, Integer orderId, int otp) {
         DeliveryPartner deliveryPartner = deliveryPartnerRepository.findByMobno(dpmobno).orElseThrow(() -> new DeliveryPartnerNotFound("Delivery Partner Not Found"));
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found with thid id"));
         if(order.getOtp()==otp){
             order.setStatus("Order_Delivered");
+            double deliveryCharges = order.getDelivery_charges();
+            double amount= order.getTotalCost()-deliveryCharges;
+            double RestShare= (amount*85)/100;
+            double deliveryPartnerShare=((amount*10)/100) + deliveryCharges;
+            order.getRestaurant().setWallet(order.getRestaurant().getWallet()+RestShare);
+            order.getDeliveryPartner().setWallet(order.getDeliveryPartner().getWallet()+ deliveryPartnerShare);
         }else{
             throw new InvalidOtpException("Invalid OTP");
         }
 
      orderRepository.save(order);
+        ResponseStructure<String> rs=new ResponseStructure<>();
+        rs.setData("Delivered");
+        rs.setMessage("Order Delivered Successfully");
+        rs.setStatuscode(200);
+        return new ResponseEntity<>(rs, HttpStatus.OK);
 
     }
 }

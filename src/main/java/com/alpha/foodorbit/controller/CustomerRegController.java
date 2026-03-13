@@ -82,11 +82,7 @@ public class CustomerRegController {
 //        return customerService.placingOrder(mobno, PaymentType, AddressType, SpecialRequest);
 //    }
 
-    @PostMapping("/customer/ConfirmPlacingOrder")
-    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(@RequestParam int orderid) {
-       return  customerService.confirmPlacingOrder(orderid);
-//        return new ResponseEntity<>("Order Placed Successfully", HttpStatus.OK);
-    }
+
 
     @PostMapping("/customer/denyPlacingOrder")
     public ResponseEntity<ResponseStructure<String>> denyPlacingOrder(@RequestParam int orderid) {
@@ -110,10 +106,36 @@ public class CustomerRegController {
     }
 
 
+
     @PostMapping("/customer/cancelOrder")
     public ResponseEntity<ResponseStructure<String>> cancleOrder(@RequestParam long mobno,@RequestParam int orderId){
         return customerService.cancelOrder(mobno,orderId);
     }
+
+    @PostMapping("/customer/ConfirmPlacingOrder")
+    public ResponseEntity<ResponseStructure<String>> confirmPlacingOrder(@RequestParam int orderid) {
+        return  customerService.confirmPlacingOrder(orderid);
+//        return new ResponseEntity<>("Order Placed Successfully", HttpStatus.OK);
+    }
+
+//    @PostMapping("/customer/ConfirmPlacingOrderByOnline")
+//    public ResponseEntity<ResponseStructure<String>>  confirmByOnline(@RequestParam long mobno,@RequestParam int orderid){
+//        return customerService.confirmByOnlinePayment(mobno,orderid);
+//    }
+
+    @PostMapping("/customer/OnlinepaymentSuccess")
+    public ResponseEntity<ResponseStructure<String>> paymentSuccess(
+            @RequestParam int orderId) {
+
+        return customerService.OnlinepaymentSuccess(orderId);
+    }
+    @PostMapping("/customer/OnlinePaymentFailed")
+    public ResponseEntity<ResponseStructure<String>> paymentFailed(
+            @RequestParam int orderId) {
+
+        return customerService.OnlinePaymentFailed(orderId);
+    }
+
 
 }
 

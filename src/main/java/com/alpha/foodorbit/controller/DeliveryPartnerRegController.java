@@ -5,6 +5,7 @@ import com.alpha.foodorbit.dto.RestaurantReqDto;
 import com.alpha.foodorbit.entities.DeliveryPartner;
 import com.alpha.foodorbit.service.DeliveryPartnerService;
 import com.alpha.foodorbit.service.RedisService;
+import com.alpha.foodorbit.special.ResponseStructure;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +71,11 @@ public class DeliveryPartnerRegController {
                                    ,@RequestParam double custlong,HttpServletResponse rest) throws IOException {
          deliveryPartnerService.getDirectionToCust(restlat,restlon,custlat,custlong,rest);
     }
-    @GetMapping("/deliveryPartner/markOrderAsDelivered")
-    public void markOrderAsDelivered(@RequestParam long dpmobno,@RequestParam Integer orderId,@RequestParam int otp){
-        deliveryPartnerService.markOrderAsDelivered(dpmobno,orderId,otp);
+    @GetMapping("/deliveryPartner/SuccessfulDelivery")
+    public ResponseEntity<ResponseStructure<String>> markOrderAsDelivered(@RequestParam long dpmobno, @RequestParam Integer orderId, @RequestParam int otp){
+        return deliveryPartnerService.markOrderAsDelivered(dpmobno,orderId,otp);
     }
+
 
 
 }
